@@ -1,45 +1,32 @@
 //your code here!
-document.addEventListener("DOMContentLoaded", function () {
-  const list = document.getElementById("infi-list");
-  const listItemLimit = 10;
-  let currentPage = 1;
+// Get the list element
+const list = document.getElementById('infi-list');
 
-  function createListItem(text) {
-    const li = document.createElement("li");
-    li.textContent = text;
-    return li;
+// Add initial list items
+for (let i = 1; i <= 10; i++) {
+  const listItem = document.createElement('li');
+  listItem.textContent = 'List item ' + i;
+  list.appendChild(listItem);
+}
+
+// Function to check if user has reached the end of the list
+function isScrollAtBottom() {
+  return list.scrollTop + list.clientHeight >= list.scrollHeight;
+}
+
+// Function to add more list items
+function addMoreItems() {
+  for (let i = 1; i <= 2; i++) {
+    const listItem = document.createElement('li');
+    listItem.textContent = 'List item ' + (list.childElementCount + i);
+    list.appendChild(listItem);
   }
+}
 
-  function addListItems(start, end) {
-    for (let i = start; i <= end; i++) {
-      const listItem = createListItem("List Item " + i);
-      list.appendChild(listItem);
-    }
+// Event listener for scroll event
+list.addEventListener('scroll', function() {
+  if (isScrollAtBottom()) {
+    addMoreItems();
   }
-
-  function isEndOfList() {
-    const listRect = list.getBoundingClientRect();
-    const lastItem = list.lastElementChild;
-    const lastItemRect = lastItem.getBoundingClientRect();
-
-    return lastItemRect.bottom <= listRect.bottom;
-  }
-
-  function loadMoreItems() {
-    const start = (currentPage - 1) * listItemLimit + 1;
-    const end = currentPage * listItemLimit;
-
-    addListItems(start, end);
-    currentPage++;
-  }
-
-  // Initial load
-  addListItems(1, listItemLimit);
-
-  // Scroll event listener
-  list.addEventListener("scroll", function () {
-    if (isEndOfList()) {
-      loadMoreItems();
-    }
-  });
 });
+
